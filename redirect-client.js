@@ -54,6 +54,11 @@ class Zoropay {
       console.error(errMsg, { publicKey });
       this.errorMessages.push(errMsg);
     }
+    else if(typeof config.publicKey !== 'string') {
+      let errMsg = `Zoropay: Public key should be of type - string (public key = ${publicKey}). Failed to initialize Zoropay object.`;
+      console.error(errMsg, { publicKey });
+      this.errorMessages.push(errMsg);
+    }
 
     this.config = config;
     this.initialize_redirect(config, redirectDelay);
@@ -65,19 +70,19 @@ class Zoropay {
     return this.errorMessages.length > 0 ? this.errorMessages : false;
   }
 
-  redirect(query, redirectDelay) {
+  redirect(query, redirectDelay, config) {
     return {
       delay: redirectDelay,
       // Start the countdown immediately
       timeout: setTimeout(() => {
-        window.location = `https://staging.app.zoropay.com?${query}`;
+        window.location = `https://${config.publicKey.indexOf('live') === 3 &&  ? '' : 'staging.'}app.zoropay.com?${query}`;
       }, redirectDelay)
     };
   }
 
   serialize_config(config, redirectDelay) {
     const queryString = `payload=${btoa(JSON.stringify(config))}`;
-    return this.redirect(queryString, redirectDelay);
+    return this.redirect(queryString, redirectDelay, config);
   }
 
   initialize_redirect(config, redirectDelay) {
