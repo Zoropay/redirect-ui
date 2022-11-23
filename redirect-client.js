@@ -75,7 +75,7 @@ class Zoropay {
       delay: redirectDelay,
       // Start the countdown immediately
       timeout: setTimeout(() => {
-        window.location = `https://${config.publicKey.indexOf('live') === 3 &&  ? '' : 'staging.'}app.zoropay.com?${query}`;
+        window.location = `https://${config.publicKey.indexOf('live') === 3 ? '' : 'staging.'}app.zoropay.com?${query}`;
       }, redirectDelay)
     };
   }
